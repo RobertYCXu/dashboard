@@ -112,13 +112,11 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
     curl -sSL https://get.rvm.io | bash -s stable
-    source $HOME/.rvm/scripts/rvm
     rvm requirements
     rvm install 2.4.0
     rvm use 2.4.0 --default
 
     sed -i 's/#force_color_prompt=yes/force_color_prompt=yes/g' ~/.bashrc
-    cat /vagrant/server-conf/bashrc.sh >> ~/.bashrc
 
     cd /vagrant
 

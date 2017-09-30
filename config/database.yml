@@ -33,7 +33,7 @@ development:
   database: dashboard_db
   pool: 5
   username: root
-  password: Roberto980302
+  password: 
   host: localhost
   <% if File.exist? "/var/mysql/mysql.sock" %>
   socket: /var/mysql/mysql.sock
