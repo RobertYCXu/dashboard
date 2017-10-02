@@ -1,0 +1,16 @@
+<h1><%= current_user.name %>'s Boards</h1>
+
+<% if @boards.empty? %>
+	<div>You have no boards.</div>
+<% else %>
+	<div>
+	<% @boards.each do |board| %>
+		<li><%= link_to board.name, board %></li>
+	<% end %>
+<% end %>
+
+<%= form_for :board do |f|%>
+	<%= f.label :name %>
+	<%= f.text_field :name %>
+	<%= f.submit "New Board" %>
+<% end %>

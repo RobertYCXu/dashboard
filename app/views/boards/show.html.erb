@@ -1,0 +1,14 @@
+<h1><%= @board.name %></h1>
+<div>
+	Created by <%= User.find(@board.owner).name %>
+</div>
+<% if current_user.id == @board.owner %>
+	<div>
+		<%= form_tag("/invitations", method: "post")do %>
+			<%= label_tag(:recipient_email, "Email") %>
+			<%= text_field_tag(:recipient_email) %>
+			<%= hidden_field_tag(:board_id, @board.id) %>
+			<%= submit_tag("Invite") %>
+		<% end %>
+	</div>
+<% end %>

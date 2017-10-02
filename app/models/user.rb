@@ -1,4 +1,10 @@
 class User < ApplicationRecord
+  has_many :teams
+  has_many :boards, through: :teams
+  has_many :notes, dependent: :destroy
+  has_many :invitations, dependent: :destroy
+
+  validates :name, presence: true, length: {maximum: 50}
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
