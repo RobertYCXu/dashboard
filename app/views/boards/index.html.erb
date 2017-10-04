@@ -1,16 +1,31 @@
-<h1><%= current_user.name %>'s Boards</h1>
+<div class='page'>
+	<canvas class="canvas"></canvas>
+	<%= render '/layouts/flash' %>
+	<h1 class='heading--home'><%= current_user.name %>'s Boards</h1>
+	<div class="container">
+		<% if @boards.empty? %>
+			<div class='container__message'>
+				You have no boards.
+			</div>
+		<% else %>
+			<div class="container__content">
+				<% @boards.each do |board| %>
+					<li class="container__pane container__pane--big"><%= link_to board.name, board %></li>
+				<% end %>
+			</div>
+		<% end %>
+		<div class="form form--boards">
+			<%= form_for :board do |f|%>
+				<%= f.label :name %>
+				<%= f.text_field :name %>
+				<br/>
+				<%= f.submit "New Board" %>
+			<% end %>
+		</div>
+	</div>
 
-<% if @boards.empty? %>
-	<div>You have no boards.</div>
-<% else %>
-	<div>
-	<% @boards.each do |board| %>
-		<li><%= link_to board.name, board %></li>
-	<% end %>
-<% end %>
 
-<%= form_for :board do |f|%>
-	<%= f.label :name %>
-	<%= f.text_field :name %>
-	<%= f.submit "New Board" %>
-<% end %>
+	
+</div>
+
+<%= render '/layouts/canvas' %>

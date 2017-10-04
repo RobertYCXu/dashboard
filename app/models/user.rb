@@ -1,7 +1,7 @@
 class User < ApplicationRecord
   has_many :teams
   has_many :boards, through: :teams
-  has_many :notes, dependent: :destroy
+  has_many :notes
   has_many :invitations, dependent: :destroy
 
   validates :name, presence: true, length: {maximum: 50}
@@ -15,6 +15,7 @@ class User < ApplicationRecord
   		user.provider = auth.provider
   		user.uid = auth.uid
   		user.email = auth.info.email
+      user.name = auth.info.name
   		user.password = Devise.friendly_token[0, 20]
   	end
   end

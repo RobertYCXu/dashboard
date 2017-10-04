@@ -5,7 +5,8 @@ Rails.application.routes.draw do
   resources :users, only: [:show]
   resources :invitations, only: [:index, :create]
   post '/boards/:id/invite', to: 'boards#invite'
-  post '/create', to: 'users#create_note'
+  post '/create', to: 'notes#create_user_note'
+  post '/boards/:id/create', to: 'notes#create_board_note'
   post '/invitations/accept', to: 'invitations#accept'
   post '/invitations/reject', to: 'invitations#reject'
 end

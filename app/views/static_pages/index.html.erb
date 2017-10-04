@@ -1,98 +1,70 @@
 <div class='page'>
 	<canvas class='canvas'></canvas>
-	<% if current_user %>
-		<h1>Hello <%= current_user.name %> - how are you doing today?</h1>
-		<% if @notes.empty? %>
-			<div>
-				You have no notes.
-			</div>
-		<% else %>
-			<div>
-				<% @notes.each do |note| %>
-				<li><%= note.note %></li>
+	<%= render '/layouts/flash' %>
+	<% if user_signed_in? %>
+		<h1 class='heading--home'>Hello <%= current_user.name %> - how are you doing today?</h1>
+		<div class='container'>
+			<% if @notes.empty? %>
+				<div class='container__message'>
+					You have no notes.
+				</div>
+			<% else %>
+				<div class='container__content'>
+					<% @notes.each do |note| %>
+						<li class="container__pane container__pane--orange"><a><%= note.note %></a></li>
+					<% end %>
+				</div>
+			<% end %>
+			<div class="form form--boards">
+				<%= form_tag("/create", method: :post) do |f|%>
+					<%= label_tag(:note, "New note") %>
+					<%= text_field_tag(:note) %>
+					<br/>
+					<%= submit_tag("New note") %>
 				<% end %>
 			</div>
-		<% end %>
-		<% if !@invitations.empty? %>
-			<div>
-				You have <%=  @invitations.size.humanize %> invitation<%= "s" unless @invitations.size == 1 %>!
-			</div>
-			<% @invitations.each do |inv| %>
-				<li><%= inv.user.name %> has invited you to join <%= Board.find(inv.board_id).name %></li>
-				<%= link_to("Accept", invitations_accept_path(board_id: inv.board_id, invitation_id: inv.id) , method: :post) %>
-				<%= link_to("Decline", invitations_reject_path(board_id: inv.board_id, invitation_id: inv.id) , method: :post) %>
+			<% if !@invitations.empty? %>
+				<div class='container__invitation'>
+					<div class="heading--medium heading--home">
+						You have <%=  @invitations.size.humanize %> invitation<%= "s" unless @invitations.size == 1 %>!
+					</div>
+					<% @invitations.each do |inv| %>
+						<li><%= inv.user.name %> has invited you to join <%= Board.find(inv.board_id).name %></li>
+						<%= link_to("Accept", invitations_accept_path(board_id: inv.board_id, invitation_id: inv.id) , method: :post) %> |
+						<%= link_to("Decline", invitations_reject_path(board_id: inv.board_id, invitation_id: inv.id) , method: :post) %>
+					<% end %>
+				</div>
 			<% end %>
-		<% end %>
+		</div>
 	<% else %>
-		<h1> Welcome to Dashboard </h1>
+		<h1 class='heading--home heading--big'> Welcome to your Dashboard </h1>
+		<h2 class='heading--home'>We'll keep you organized, so you can take care of the rest.</h2>
+		<div class='form form--home'>
+			<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+			  <div class="field">
+			    <%= f.label :email %><br />
+			    <%= f.email_field :email, autofocus: true %>
+			  </div>
+
+			  <div class="field">
+			    <%= f.label :password %><br />
+			    <%= f.password_field :password, autocomplete: "off" %>
+			  </div>
+
+			  <% if devise_mapping.rememberable? -%>
+			    <div class="field--remember">
+			      <%= f.check_box :remember_me%>
+			      <%= f.label :remember_me, class: "form__label--remember" %>
+			    </div>
+			  <% end -%>
+
+			  <div class="actions">
+			    <%= f.submit "Log in" %>
+			  </div>
+			<% end %>
+			<%= render "users/shared/links" %>
+		</div>
 	<% end %>
 </div>
 
-<script type="text/javascript">
-	(function () {
-	  var canvas = document.getElementsByClassName('canvas')[0];
-	  var ctx = canvas.getContext('2d');
-	  var width = canvas.width = window.innerWidth;
-	  var height = canvas.height = window.innerHeight;
-	  var particleCount = 100;
-	  var particles = [];
-	  
-	  function init() {
-	    for (var i = 0; i < particleCount; i++) {
-	      createParticle();
-	    }
-	  }
-	  
-	  function createParticle() {
-	    var newParticle = new Particle();
-	    newParticle.initialize();
-	    particles.push(newParticle);
-	  }
-	  
-	  function Particle() {
-	    this.initialize = function() {
-	      this.x = Math.random() * width;
-	      this.y = Math.random() * height + height;
-	      this.v = 5 + Math.random() * 5;
-	      this.s = 5 + Math.random() * 5;
-	    }
-	    
-	    this.update = function () {
-	      this.x += Math.sin(this.s);
-	      this.s -= 0.1;
-	      this.y -= this.v * 0.5;
-	      if (this.isOutOfBounds()) {
-	        this.initialize();
-	      }
-	    }
-	    
-	    this.draw = function () {
-	      ctx.fillRect(this.x, this.y, this.s, this.s);
-	      ctx.fillStyle = "#FFF";
-	      ctx.fill();
-	    }
-	    
-	    this.isOutOfBounds = function () {
-	      return ((this.x < 0) || (this.x > width) || (this.y < 0) || (this.y > height));
-	    }
-	  }
-	  
-	  function render() {
-	    ctx.clearRect(0, 0, width, height);
-	    for (var i = 0; i < particles.length; i++) {
-	      particles[i].update();
-	      particles[i].draw();
-	    }
-	    requestAnimationFrame(render);
-	  }
-
-	  window.addEventListener('resize', resize);
-	  function resize() {
-	    width = canvas.width = window.innerWidth;
-	    height = canvas.height = window.innerHeight;
-	  }
-	  
-	  init();
-	  render();
-	})();
-</script>
+<%= render '/layouts/canvas' %>

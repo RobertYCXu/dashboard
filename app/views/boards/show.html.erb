@@ -1,14 +1,41 @@
-<h1><%= @board.name %></h1>
-<div>
-	Created by <%= User.find(@board.owner).name %>
-</div>
-<% if current_user.id == @board.owner %>
-	<div>
-		<%= form_tag("/invitations", method: "post")do %>
-			<%= label_tag(:recipient_email, "Email") %>
-			<%= text_field_tag(:recipient_email) %>
-			<%= hidden_field_tag(:board_id, @board.id) %>
-			<%= submit_tag("Invite") %>
+<div class="page">
+	<canvas class="canvas"></canvas>
+	<%= render '/layouts/flash' %>
+	<h1 class="heading--home"><%= @board.name %></h1>
+	<h2 class="heading--home">Created by <%= User.find(@board.owner).name %></h2>
+	<div class='container'>
+		<% if @notes.empty? %>
+			<div class='container__message'>
+				This board has no notes.
+			</div>
+		<% else %>
+			<div class='container__content'>
+				<% @notes.each do |note| %>
+					<li class="container__pane container__pane--orange"><a><%= note.note %></a></li>
+				<% end %>
+			</div>
+		<% end %>
+		<div class="form form--boards">
+			<%= form_tag("/boards/#{@board.id}/create", method: :post) do |f|%>
+				<%= label_tag(:note, "New note") %>
+				<%= text_field_tag(:note) %>
+				<%= hidden_field_tag(:board_id, @board.id) %>
+				<br/>
+				<%= submit_tag("New note") %>
+			<% end %>
+		</div>
+		<% if current_user.id == @board.owner %>
+			<div class="form form--boards">
+				<%= form_tag("/invitations", method: "post")do %>
+					<%= label_tag(:recipient_email, "Email") %>
+					<%= text_field_tag(:recipient_email) %>
+					<%= hidden_field_tag(:board_id, @board.id) %>
+					<br/>
+					<%= submit_tag("Invite to your board") %>
+				<% end %>
+			</div>
 		<% end %>
 	</div>
-<% end %>
+</div>
+
+<%= render '/layouts/canvas' %>

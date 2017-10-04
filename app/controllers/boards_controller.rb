@@ -1,6 +1,6 @@
 class BoardsController < ApplicationController
 	before_action :correct_user, only: [:show]
-	before_action :logged_in_user, only: [:index]
+	before_action :logged_in_user, only: [:index, :create]
 	def create
 		@board = Board.new(board_params)
 		@board.owner = current_user.id
@@ -9,6 +9,7 @@ class BoardsController < ApplicationController
 			flash[:success] = "Successfully created new board!"
 			redirect_to '/boards'
 		else
+			flash[:danger] = "Oops! Something went wrong."
 			render '/boards'
 		end
 	end
@@ -17,8 +18,8 @@ class BoardsController < ApplicationController
 		@boards = current_user.boards
 	end
 	def show
-		
 		@board = current_user.boards.find(params[:id])
+		@notes = @board.notes
 	end
 
 	private
