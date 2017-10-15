@@ -10,7 +10,14 @@
 		<% else %>
 			<div class="container__content">
 				<% @boards.each do |board| %>
-					<li class="container__pane container__pane--big"><%= link_to board.name, board %></li>
+					<li class="container__pane container__pane--big"><%= link_to board.name, board %>
+						<div class="button--small">
+							<%= form_tag("/boards/#{board.id}", method: :delete) do |f|%>
+								<br/>
+								<%= submit_tag("Delete board") %>
+							<% end %>
+						</div>
+					</li>
 				<% end %>
 			</div>
 		<% end %>

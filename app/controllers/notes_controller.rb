@@ -22,5 +22,13 @@ class NotesController < ApplicationController
 		redirect_to "/boards/#{params[:board_id]}"
 	end
 
-	
+	def destroy
+		@note = Note.find(params[:id])
+		if @note.destroy
+			flash[:success] = "Successfully deleted note!"
+		else
+			flash[:danger] = "Oops! Something went wrong."
+		end
+		redirect_back(fallback_location: root_path)
+	end
 end

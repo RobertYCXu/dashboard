@@ -22,6 +22,16 @@ class BoardsController < ApplicationController
 		@notes = @board.notes
 	end
 
+	def destroy
+		@board = Board.find(params[:id])
+		if @board.destroy
+			flash[:success] = "Successfully deleted board!"
+		else
+			flash[:danger] = "Oops! Something went wrong."
+		end
+		redirect_back(fallback_location: root_path)
+	end
+
 	private
 		def board_params
 			params.require(:board).permit(:name)

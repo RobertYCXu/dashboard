@@ -1,5 +1,10 @@
 class InvitationsController < ApplicationController
 	def create
+		if current_user == User.find_by_email(params[:recipient_email])
+			flash[:danger] = "Nice try - can't invite yourself to your own board ;)"
+			redirect_to "/boards/#{params[:board_id]}"
+			return true
+		end
 		if User.exists?(email: params[:recipient_email])
 			recipient_id = User.find_by_email(params[:recipient_email]).id
 			if !Invitation.exists?(board_id: params[:board_id], recipient_id: recipient_id, user_id: current_user.id)

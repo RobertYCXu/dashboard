@@ -1,7 +1,7 @@
 class User < ApplicationRecord
-  has_many :teams
-  has_many :boards, through: :teams
-  has_many :notes
+  has_many :teams, dependent: :destroy
+  has_many :boards, through: :teams, dependent: :destroy
+  has_many :notes, dependent: :destroy
   has_many :invitations, dependent: :destroy
 
   validates :name, presence: true, length: {maximum: 50}

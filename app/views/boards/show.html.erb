@@ -11,7 +11,14 @@
 		<% else %>
 			<div class='container__content'>
 				<% @notes.each do |note| %>
-					<li class="container__pane container__pane--orange"><a><%= note.note %></a></li>
+					<li class="container__pane container__pane--orange"><a><%= note.note %></a>
+							<div class="button--small">
+								<%= form_tag("/notes/#{note.id}", method: :delete) do |f|%>
+									<br/>
+									<%= submit_tag("Delete note") %>
+								<% end %>
+							</div>
+						</li>
 				<% end %>
 			</div>
 		<% end %>
