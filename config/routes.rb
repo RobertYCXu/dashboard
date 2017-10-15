@@ -9,5 +9,6 @@ Rails.application.routes.draw do
   post '/boards/:id/create', to: 'notes#create_board_note'
   post '/invitations/accept', to: 'invitations#accept'
   post '/invitations/reject', to: 'invitations#reject'
+  post 'boards/remove', to: 'boards#remove_member'
   resources :notes, only: [:destroy]
 end

@@ -24,8 +24,20 @@ class BoardsController < ApplicationController
 
 	def destroy
 		@board = Board.find(params[:id])
-		if @board.destroy
+		if @board.owner == current_user.id && @board.destroy
 			flash[:success] = "Successfully deleted board!"
+		else
+			flash[:danger] = "Oops! Something went wrong."
+		end
+		redirect_back(fallback_location: root_path)
+	end
+
+	def remove_member
+		@user = User.find(params[:user_id])
+		@board = Board.find(params[:board_id])
+		@team = Team.find_by(user: @user, board: @board)
+		if @team.destroy
+			flash[:success] = "Successfully removed #{@user.name} from #{@board.name}"
 		else
 			flash[:danger] = "Oops! Something went wrong."
 		end

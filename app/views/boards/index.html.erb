@@ -11,12 +11,14 @@
 			<div class="container__content">
 				<% @boards.each do |board| %>
 					<li class="container__pane container__pane--big"><%= link_to board.name, board %>
-						<div class="button--small">
-							<%= form_tag("/boards/#{board.id}", method: :delete) do |f|%>
-								<br/>
-								<%= submit_tag("Delete board") %>
-							<% end %>
-						</div>
+						<% if board.owner == current_user.id %>
+							<div class="button--small">
+								<%= form_tag("/boards/#{board.id}", method: :delete) do |f|%>
+									<br/>
+									<%= submit_tag("Delete board") %>
+								<% end %>
+							</div>
+						<% end %>
 					</li>
 				<% end %>
 			</div>

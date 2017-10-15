@@ -42,6 +42,19 @@
 				<% end %>
 			</div>
 		<% end %>
+		<div class='container__invitation'>
+			<div class="heading--medium heading--home">
+				There <%= @board.users.size > 1 ? "are" : "is"%> <%=  @board.users.size.humanize %> member<%= "s" unless @board.users.size == 1 %> on this board.
+			</div>
+			<% @board.users.each do |user| %>
+				<% if current_user.id == @board.owner  && user.id != @board.owner %>
+					<li style="display: inline-block;"><%= user.name %> <%= user.id == @board.owner ? "(owner)" : nil %></li> |
+					<%= link_to("Remove", boards_remove_path(board_id: @board.id, user_id: user.id) , method: :post) %>
+				<% else %>
+					<li ><%= user.name %> <%= user.id == @board.owner ? "(owner)" : nil %></li>
+				<% end %>
+			<% end %>
+		</div>
 	</div>
 </div>
 
