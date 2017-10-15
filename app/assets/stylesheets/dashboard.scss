@@ -115,7 +115,7 @@ a{
 	.field--remember{
 		margin:0;
 	}
-	input[type='submit']{
+	input[type='submit'], input[type='button']{
 		color: white;
 		height:auto;
 		font-size:20px;
@@ -125,7 +125,7 @@ a{
 		transition:1s;
 
 	}
-	input[type='submit']:hover{
+	input[type='submit']:hover, input[type='button']:hover{
 		transform: translateY(-3px);
 		border-bottom: 3px solid white;
 		cursor:pointer;
